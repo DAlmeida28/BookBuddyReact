@@ -1,7 +1,7 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
-const Auth = ({ setToken }) => {
+const Auth = ({ setToken, setUserAccount, userAccount,token }) => {
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [emailRegister, setEmailRegister] = useState('');
@@ -16,7 +16,7 @@ const Auth = ({ setToken }) => {
   const submitRegister = async (event) => {
     event.preventDefault();
 
-    const reponse = await fetch ('https://fsa-book-buddy-b6e748d1380d.herokuapp.com/api/users/register',{ 
+    const reponse = await fetch('https://fsa-book-buddy-b6e748d1380d.herokuapp.com/api/users/register', {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -28,52 +28,70 @@ const Auth = ({ setToken }) => {
         password: passwordRegister
       })
     }
-  )
-const { token } = await reponse.json();
-// setToken(token);
-localStorage.setItem('token', token);
+    )
+    const { token } = await reponse.json();
+    // setToken(token);
+    localStorage.setItem('token', token);
   }
 
-const loginRequest = async (event) => {
-  event.preventDefault();
+  const loginRequest = async (event) => {
+    event.preventDefault();
 
-  const response = await fetch('https://fsa-book-buddy-b6e748d1380d.herokuapp.com/api/users/login', {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      email: emailLogin,
-      password: passwordLogin
+    const response = await fetch('https://fsa-book-buddy-b6e748d1380d.herokuapp.com/api/users/login', {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        email: emailLogin,
+        password: passwordLogin
+      })
     })
-  })
-  const { token } = await response.json();
-  setToken(localStorage.setItem('token', token));
-  navigate('/myaccount');
-}
+    const { token } = await response.json();
+    setToken(localStorage.setItem('token', token));
+    getAccount();
+    navigate('/myaccount');
+
+  }
+
+  const getAccount = async () => {
+    const response = await fetch('https://fsa-book-buddy-b6e748d1380d.herokuapp.com/api/users/me', {
+      method: "GET",
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${localStorage.getItem('token')}`
+      }
+    })
+    const reply = await response.json();
+    localStorage.setItem('FirstName', reply.firstName);
+    localStorage.setItem('LastName', reply.lastname);
+    localStorage.setItem('Email', reply.email);
+    setUserAccount(reply);
+  
+  }
 
   return (
     <>
 
-    {showLogin ?
-    <>
-      <input onChange={((event) => {setEmailLogin(event.target.value)})}type="email" placeholder="email"/>
-      <input onChange={((event) => {setPasswordLogin(event.target.value)})}type="password" placeholder="password"/>
-      <button onClick={loginRequest}>Login</button>
-      <button onClick={() => {setShowLogin(false)}}> Register </button> 
-      <button onClick={() => {navigate('/')}}>Back to Book List</button>
-    </>     
-      :
-      <section>
-        <form onSubmit={submitRegister}>
-          <input onChange={(event) => {setFirstName(event.target.value)}}placeholder="firstname"/>
-          <input onChange={(event) => {setLastName(event.target.value)}}placeholder="lastname"/>
-          <input onChange={(event) => {setEmailRegister(event.target.value)}}type="email" placeholder="email"/>
-          <input onChange={(event) => {setPasswordRegister(event.target.value)}}type="password" placeholder="password"/>
-          <button> Submit </button>
-        </form>
-      </section>
-}
+      {showLogin ?
+        <>
+          <input onChange={((event) => { setEmailLogin(event.target.value) })} type="email" placeholder="email" />
+          <input onChange={((event) => { setPasswordLogin(event.target.value) })} type="password" placeholder="password" />
+          <button onClick={loginRequest}>Login</button>
+          <button onClick={() => { setShowLogin(false) }}> Register </button>
+          <button onClick={() => { navigate('/') }}>Back to Book List</button>
+        </>
+        :
+        <section>
+          <form onSubmit={submitRegister}>
+            <input onChange={(event) => { setFirstName(event.target.value) }} placeholder="firstname" />
+            <input onChange={(event) => { setLastName(event.target.value) }} placeholder="lastname" />
+            <input onChange={(event) => { setEmailRegister(event.target.value) }} type="email" placeholder="email" />
+            <input onChange={(event) => { setPasswordRegister(event.target.value) }} type="password" placeholder="password" />
+            <button> Submit </button>
+          </form>
+        </section>
+      }
     </>
   )
 }
