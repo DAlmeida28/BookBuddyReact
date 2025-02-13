@@ -30,7 +30,7 @@ const Auth = ({ setToken }) => {
     }
   )
 const { token } = await reponse.json();
-setToken(token);
+// setToken(token);
 localStorage.setItem('token', token);
   }
 
@@ -48,10 +48,8 @@ const loginRequest = async (event) => {
     })
   })
   const { token } = await response.json();
-  setToken(token);  
-  localStorage.setItem('token', token);
+  setToken(localStorage.setItem('token', token));
   navigate('/myaccount');
-  // console.log(token);
 }
 
   return (
