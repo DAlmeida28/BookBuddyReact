@@ -1,6 +1,9 @@
 import { useEffect } from "react"
+import { useNavigate } from "react-router-dom"
 
 const MyAccount = ({userAccount, setUserAccount}) => {
+  const navigate = useNavigate();
+
   useEffect(() => {
     const getAccount = async () => {
       const response = await fetch('https://fsa-book-buddy-b6e748d1380d.herokuapp.com/api/users/me', {
@@ -15,9 +18,7 @@ const MyAccount = ({userAccount, setUserAccount}) => {
     }
     getAccount();
   }, [])
-  //api call with sending token to get this user account details
-  //return to this page and set the use state to App.jsx higher level
-  //useEffect is needed for the api call
+
   return (
     <>
     {console.log(userAccount)}
@@ -27,6 +28,8 @@ const MyAccount = ({userAccount, setUserAccount}) => {
       <p>Name: {userAccount.firstname} {userAccount.lastname}</p>
       <p>Email: {userAccount.email}</p>
       <p>Books Checked out: {userAccount.Books}</p>
+
+      <button onClick={() => {navigate('/')}}>Back to Book List</button>
  
     </>
   )

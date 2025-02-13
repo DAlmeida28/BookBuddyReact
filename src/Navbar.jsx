@@ -8,8 +8,11 @@ const navigate = useNavigate();
       <section>
         <button onClick={() => {navigate('/auth/')}}>Login/Register</button>
       </section>
+
+      {
+        localStorage.getItem('token') ? <button onClick={() => {navigate('/myaccount')}}>My Account</button> : null
+      }
     </>
   )
 }
-//login/register -> auth and defaults to login (login true) register button here then if clicked sets login to false
 export default Auth
