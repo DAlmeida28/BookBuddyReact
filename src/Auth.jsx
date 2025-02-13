@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-const Auth = (setToken) => {
+const Auth = ({ setToken }) => {
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [emailRegister, setEmailRegister] = useState('');
@@ -29,8 +29,9 @@ const Auth = (setToken) => {
       })
     }
   )
-const response = await reponse.json();
-// console.log(response)
+const { token } = await reponse.json();
+setToken(token);
+localStorage.setItem('token', token);
   }
 
 const loginRequest = async (event) => {
@@ -46,9 +47,11 @@ const loginRequest = async (event) => {
       password: passwordLogin
     })
   })
-  const reply = await response.json();
-  console.log(reply)
-  setToken(reply.token);  
+  const { token } = await response.json();
+  setToken(token);  
+  localStorage.setItem('token', token);
+  navigate('/myaccount');
+  // console.log(token);
 }
 
   return (
