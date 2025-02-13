@@ -18,7 +18,7 @@ function App() {
 
     <Routes>
       <Route path="/" element={<BookList setBookDetails={setBookDetails}/>}/>
-      <Route path="/bookdetails/:bookid" element={<BookDetails bookDetails={bookDetails} setBookDetails={setBookDetails}/>}/>
+      <Route path="/bookdetails/:bookid" element={<BookDetails bookDetails={bookDetails} setBookDetails={setBookDetails} token={token}/>}/>
       <Route path="/auth" element={<Auth setToken={setToken} />}/>
       <Route path="/myaccount" element={<MyAccount setUserAccount={setUserAccount} userAccount={userAccount}/>}/>
     </Routes>
