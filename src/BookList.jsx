@@ -22,13 +22,14 @@ const BookList = ({ setBookDetails }) => {
         {allBooks.map((book) => {
 
           return (
-            <p key={book.id}
+            <p
+              className="Book"
+              key={book.id}
               onClick={() => {
                 setBookDetails(book);
                 navigate(`/bookdetails/${book.id}`);
               }
               }>
-              {book.title}
               <img src={book.coverimage} height="450px" width="200px" />
             </p>
           )

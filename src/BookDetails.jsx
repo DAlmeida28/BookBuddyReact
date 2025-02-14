@@ -33,11 +33,11 @@ const checkoutBook = async () => {
 }
   return (
     <>
-      <section>
+      <section id="bookdetails">
         <h1>{singleBook.title} </h1>
-        <p><img src={singleBook.coverimage} height="800px" width="600px" /></p>
+        <img src={singleBook.coverimage} height="800px" width="600px" />
         <p>Author: {singleBook.author}</p>
-        <p>Description: {singleBook.description}</p>
+        <p id="description">Description: {singleBook.description}</p>
         <p>Book ID: {bookid}</p>
       </section>
       <button onClick={() => {navigate('/')}}>Return to Book List </button>
